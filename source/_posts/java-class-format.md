@@ -171,15 +171,15 @@ ca fe ba be | |  魔法数
 00 34 | 52 | 主版本(使用jdk8编译)
 00 18 | 24 | 常量数个数，该class文件中有23个常量，索引下标1~23
 **常量池开始** | -- | --
-0a | 10 |  **常量#1**  
+0a | 10 |  **常量#1** 符号引用 CONSTANT_Methodref_info 
 00 04 | 4 | 指向常量#4
 00 14 | 20 |指向常量#20
-09 | 9 | **常量#2**  
+09 | 9 | **常量#2**  符号引用 CONSTANT_Class_info 
 00 03 | 3 | 指向常量#3
 00 15 | 21 | 指定索引#21
-07 | 7 | **常量#3** 
+07 | 7 | **常量#3**  符号引用 CONSTANT_Fieldref_info 
 00 16 | 22 | 指向索引#22
-07 | 7 | **常量#4**
+07 | 7 | **常量#4** 符号引用 CONSTANT_Fieldref_info 
 00 17 | 23 | 指向#23
 01 | 1 | **常量#5** 字符串常量
 05 | 5 | 长度5
@@ -251,7 +251,7 @@ ca fe ba be | |  魔法数
 00 00 | 0 | 该字段没有携带属性
 **字段表结束** | -- | --
 **方法表集合开始** | -- | -- 
-00 03 | 3 | 3个方法(位置:120/1)
+00 03 | 3 | 3个方法(位置:120/0)
 00 01 | 1 | **方法1** public方法
 00 07 | 7 | 指向常量#7 -字符串值:inti<>
 00 08 | 8 | 指向常量#8 -字符串值:()V
@@ -281,4 +281,160 @@ ca fe ba be | |  魔法数
 
 *表中（位置:x/y）对应上图中字节在WinHex中的位置*
 
+下面解析第一个方法`inti<>`中的code属性(位置从120/4到150/f)  
+根据code属性表结构
 
+类型 | 名称 | 数量
+---|---|---
+u2 | attribute_name_index | 1
+u4 | attributes_length | 1
+u2 | max_stack | 1
+u2 | max_locals | 1
+u4 | code_lenght | 1
+u1 | code | code_lenght
+u2 | exception_table_length | 1
+exception_info | exception_table | exception_table_length
+u2 | attributes_count | 1
+attribute_info | attributes | attributes_count
+
+解析结果如下
+
+16进制值 | 10进制值 | 	解析
+---|---|---
+00 09 | 9 |  属性名称 指向常量#9 -字符串值:code
+00 00 00 2f | 47 | 
+00 01 | 1 | max_stack
+00 01 | 1 | max_locals
+00 00 00 05 | 5 | 字节码数量
+2A B7 00 01 B1 	| 字节码
+00 00 | | 不抛出异常
+00 02	| 2 | 携带2个属性
+00 0a | 10 | **属性1** attribute_name_index 指定变量#10 -字符串值:LineNumberTable
+00 00 00 06  | 6  | attribute_length 
+000100000006   | | 
+00 0b  | 11| **属性2** attribute_name_index   指定变量#11 -字符串值:LocalVariableTable
+00 00 00 0c | 12 | attribute_length
+000100000005000C000D0000 | |
+
+(LineNumberTable属性建立了字节码偏移量到源代码行号之间的联系,LocalVariableTable 属性建立了方法中的局部变量与源代码中的局部变量之间的对应关系)  
+**max_stack代表操作数栈深度的最大值。在方法执行的任意时刻，，操作数栈都不会超过这个深度。虚拟机运动的时候需要根据这个值来分配栈桢中的操作栈深度。 
+max_locals代表局部变量表所需的存储空间，单位是Variable Slot（虚拟机为局部变量分配内存所使用的最小单位。）  
+在实例方法局部变量表中会预留出第一个 Slot 位来存放对象实例引用，所以max_stack/max_locals为1**
+
+
+最重要是字节码`2A B7 00 01 B1`，虚拟机将方法体中的代码转化为字节码存储在这里。  
+
+`2A` aload_0 将第0个Slot中reference类型的本地变量推送到操作数栈顶  
+`B7` invokerspecial 以栈顶reference类型数据所指对象作为方法接收者，调用此对象的实例构造器方法，private方法或它的父类方法。该指令接收一个u2类型的参数说明具体调用哪一个方法。  
+`0001` invokerspecial参数 指向常量#1  
+`B1` return 
+
+可以使用javap解析class文件
+```
+>javap -help
+用法: javap <options> <classes>
+其中, 可能的选项包括:
+  -help  --help  -?        输出此用法消息
+  -version                 版本信息
+  -v  -verbose             输出附加信息
+  -l                       输出行号和本地变量表
+  -public                  仅显示公共类和成员
+  -protected               显示受保护的/公共类和成员
+  -package                 显示程序包/受保护的/公共类
+                           和成员 (默认)
+  -p  -private             显示所有类和成员
+  -c                       对代码进行反汇编
+  -s                       输出内部类型签名
+  -sysinfo                 显示正在处理的类的
+                           系统信息 (路径, 大小, 日期, MD5 散列)
+  -constants               显示最终常量
+  -classpath <path>        指定查找用户类文件的位置
+  -cp <path>               指定查找用户类文件的位置
+  -bootclasspath <path>    覆盖引导类文件的位置
+```
+
+使用javap解析上述blog.class
+```
+> javap -v Blog.class
+Classfile /F:/learning/Blog.class
+  Last modified 2016-11-30; size 500 bytes
+  MD5 checksum eae8926f4456cae2cf3bdef1048a4bea
+  Compiled from "Blog.java"
+public class bean.Blog
+  minor version: 0
+  major version: 52
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #4.#20         // java/lang/Object."<init>":()V
+   #2 = Fieldref           #3.#21         // bean/Blog.title:Ljava/lang/String;
+   #3 = Class              #22            // bean/Blog
+   #4 = Class              #23            // java/lang/Object
+   #5 = Utf8               title
+   #6 = Utf8               Ljava/lang/String;
+   #7 = Utf8               <init>
+   #8 = Utf8               ()V
+   #9 = Utf8               Code
+  #10 = Utf8               LineNumberTable
+  #11 = Utf8               LocalVariableTable
+  #12 = Utf8               this
+  #13 = Utf8               Lbean/Blog;
+  #14 = Utf8               getTitle
+  #15 = Utf8               ()Ljava/lang/String;
+  #16 = Utf8               setTitle
+  #17 = Utf8               (Ljava/lang/String;)V
+  #18 = Utf8               SourceFile
+  #19 = Utf8               Blog.java
+  #20 = NameAndType        #7:#8          // "<init>":()V
+  #21 = NameAndType        #5:#6          // title:Ljava/lang/String;
+  #22 = Utf8               bean/Blog
+  #23 = Utf8               java/lang/Object
+{
+  public bean.Blog();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+      LineNumberTable:
+        line 6: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lbean/Blog;
+
+  public java.lang.String getTitle();
+    descriptor: ()Ljava/lang/String;
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: getfield      #2                  // Field title:Ljava/lang/String;
+         4: areturn
+      LineNumberTable:
+        line 11: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lbean/Blog;
+
+  public void setTitle(java.lang.String);
+    descriptor: (Ljava/lang/String;)V
+    flags: ACC_PUBLIC
+    Code:
+      stack=2, locals=2, args_size=2
+         0: aload_0
+         1: aload_1
+         2: putfield      #2                  // Field title:Ljava/lang/String;
+         5: return
+      LineNumberTable:
+        line 15: 0
+        line 16: 5
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       6     0  this   Lbean/Blog;
+            0       6     1 title   Ljava/lang/String;
+}
+SourceFile: "Blog.java"
+
+```
+javap已经详细地解析了class文件。
