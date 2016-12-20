@@ -1,0 +1,12 @@
+#ds-thread  > #ds-reset > .ds-comments-info, #ds-thread  > #ds-reset > .ds-toolbar , #ds-thread  > #ds-reset > .ds-powered-by  {
+	display: none;
+}
+
+
+figure.highlight  {
+	background-color:#404040;
+}
+
+figure.highlight   .line {
+	color:#FFFFFF;
+}
