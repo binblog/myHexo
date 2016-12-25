@@ -160,3 +160,69 @@ footer {
 .min-font {
 	font-size:0.8em;
 }
+
+
+
+
+#local-search-result>ul.search-result-list>li  a{
+    color: #009688;
+} 
+
+#local-search-result>ul.search-result-list>li
+ p{
+    color: #333333;
+}
+
+
+#local-search-result>ul.search-result-list>li:hover{
+    background-color: #4078c0;
+}
+
+#local-search-result>ul.search-result-list>li:hover a{
+    color: #FFF;
+} 
+
+#local-search-result>ul.search-result-list>li:hover p{
+    color: #FFF;
+}
+
+
+#local-search-result>ul.search-result-list>li.hover{
+    background-color: #4078c0;
+}
+
+#local-search-result>ul.search-result-list>li.hover a{
+    color: #FFF;
+} 
+
+#local-search-result>ul.search-result-list>li.hover p{
+    color: #FFF;
+}
+
+#local-search-result {
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    max-width: 100%;
+    position: absolute;
+    z-index: 6;
+}
+
+#local-search-result ul {
+    list-style: outside none none;
+    padding: 0;
+ 
+	line-height: 1.6;
+}
+
+#local-search-result ul li {
+    border-top: 1px solid #dadada;
+    padding: 10px 20px;
+	width: 240px;
+	word-wrap:break-word;
+	word-break:break-all; 
+}
+
+#local-search-result  .search-keyword {
+	font-weight:bold;
+}

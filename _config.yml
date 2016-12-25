@@ -2,6 +2,11 @@
 ## Docs: https://hexo.io/docs/configuration.html
 ## Source: https://github.com/hexojs/hexo/
 
+search:
+  path: search.xml
+  field: post
+
+
 # Site
 title: bin blog
 subtitle:
@@ -13,7 +18,7 @@ avatar: /images/head.png
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://localhost:4000/
+url: http://localhost:4000
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -94,8 +99,5 @@ deploy:
   
 toc: true
     
-search:
-  path: search.xml
-  field: post
 
 duoshuo_shortname: tanke773
