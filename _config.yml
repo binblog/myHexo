@@ -7,13 +7,13 @@ title: bin blog
 subtitle:
 description:
 author: bin
-language: zh-Hans
+language: zh-CN
 timezone:
 avatar: /images/head.png
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://localhost:4000/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -67,6 +67,8 @@ time_format: HH:mm:ss
 per_page: 10
 pagination_dir: page
 
+
+
 archive_generator:
   per_page: 10 ##归档页面默认10篇文章标题，如果值为0不分页
   yearly: true ##生成年视图
@@ -74,9 +76,13 @@ archive_generator:
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
-## Themes: https://hexo.io/themes/
-theme: fexo
+# Themes: https://hexo.io/themes/
+#theme: fexo
+#theme: material
 #theme: next
+#theme: hexo-theme-primer
+#theme: pln
+theme: mat2
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
@@ -84,8 +90,12 @@ deploy:
   type: git
   repository: https://binblog:bin19910810@github.com/binblog/binblog.github.io.git
   branch: master
+  
+  
+toc: true
+    
+search:
+  path: search.xml
+  field: post
 
-
-prism_plugin:
-  mode: 'preprocess'    # realtime/preprocess
-  theme: 'dark'
+duoshuo_shortname: tanke773

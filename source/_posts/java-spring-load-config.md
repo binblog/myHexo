@@ -5,16 +5,16 @@ tags:
 - 源码
 ---
 bean类
-~~~
+```java
 public class Blog {
     private String title;
 
     ... getter and settter
 }
-~~~
+```
 
 spring.xml配置  
-```
+```java
     <bean id="blog" class="spring.bean.Blog">
         <property name="title" value="hello spring"></property>
     </bean>
@@ -22,7 +22,7 @@ spring.xml配置
 
 
 测试方法
-```
+```java
 	@Test
     public void test() {
         BeanFactory xmlBeanFactory = new XmlBeanFactory(new ClassPathResource("spring.xml"));
@@ -37,7 +37,7 @@ spring.xml配置
 
 
 
-```
+```java
 BeanFactory bf = new XmlBeanFactory(new ClassPathResource("spring.xml"));
 ```
 加载过程大致示意图
@@ -51,7 +51,7 @@ BeanDefinitionParserDelegate->BeanDefinitionParserDelegate:parseBeanDefinitionEl
 
 跟踪`XmlBeanFactory`的构造方法，
 
-```
+```java
 	public XmlBeanFactory(Resource resource, BeanFactory parentBeanFactory) ... {
 		super(parentBeanFactory);
 		this.reader.loadBeanDefinitions(resource);	// 注:this.reader为XmlBeanDefinitionReader
@@ -59,7 +59,7 @@ BeanDefinitionParserDelegate->BeanDefinitionParserDelegate:parseBeanDefinitionEl
 ```
 
 XmlBeanDefinitionReader.loadBeanDefinitions：
-```
+```java
 public int loadBeanDefinitions(Resource resource) ... {
 	return loadBeanDefinitions(new EncodedResource(resource));
 }
@@ -92,7 +92,7 @@ public int registerBeanDefinitions(Document doc, Resource resource) ... {
 ```
 
 DefaultBeanDefinitionDocumentReader.registerBeanDefinitions:
-```
+```java
 public void registerBeanDefinitions(Document doc, XmlReaderContext readerContext) {
 	...
 	// 获取root元素
