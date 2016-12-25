@@ -16,7 +16,7 @@
 									<span class="post-time"><%= date(post.date) %></span>
 		              <div class="excerpt"><%- post.excerpt %></div>
 		              <% if (post.excerpt){ %>
-		                  <a class="btn btn-default" href="<%- url_for(post.path) %>"> MORE... </a>
+		                  <a class="min-font" href="<%- url_for(post.path) %>"> 全文 </a>
 		              <% } %>
 		            </div>
 				<% }) %>
