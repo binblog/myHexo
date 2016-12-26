@@ -4,6 +4,9 @@ date: 2016-12-15 09:30:06
 tags:
 - 源码
 ---
+本文通过阅读源码，分析spring加载配置文件的过程
+<!--more-->
+
 bean类
 ```java
 public class Blog {

@@ -4,6 +4,9 @@ date: 2016-12-16 07:45:24
 tags:
 - 源码
 ---
+本文通过源码阅读，分析spring获取bean的过程
+<!--more-->
+
 ```
     Blog bean = (Blog)xmlBeanFactory.getBean("blog");
 ```

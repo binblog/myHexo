@@ -157,6 +157,11 @@ footer {
 
 
 /*my style*/
+.index-item-wrapper {
+	
+	margin-top:2.5em;
+}
+
 .min-font {
 	font-size:0.8em;
 }
@@ -225,4 +230,33 @@ footer {
 
 #local-search-result  .search-keyword {
 	font-weight:bold;
+}
+
+
+
+/*table css*/
+table {
+    border: 1px solid #dfdfdf;
+    margin-bottom: 30px;
+    max-width: 100%;
+    width: 100%;
+	
+	border-collapse: collapse;
+    border-spacing: 0;
+	
+	box-sizing: border-box;
+}
+
+
+table > thead > tr > th, table > thead > tr > td {
+    border-bottom-width: 2px;
+}
+table td, table th {
+    border: 1px solid #dfdfdf;
+    color: #555;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
 }
