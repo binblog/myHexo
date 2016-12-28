@@ -6,28 +6,32 @@ tags:
 categories: 
 - java
 ---
-1. 八进制转义序列  
-**`\` + 三位八进制数字**   
-范围: '\000'~'\377'     
+简单总结了java中转义字符的使用。
+
+<!--more-->
+
+**八进制转义序列**
+`\` + 三位八进制数字  
+范围: `'\000'`~`'\377'`  
 如 `\101` 表示`A`（101为十进制数字65）
  
-参考：
-[ASCII字符集](https://zh.wikipedia.org/wiki/ASCII)
-
-2. Unicode转义字符: **`\u` + 四个十六进制数字**  
-范围: \u0000 ~ \ufffff
-
-参考：
-[Unicode字符列表](https://zh.wikipedia.org/wiki/Unicode%E5%AD%97%E7%AC%A6%E5%88%97%E8%A1%A8)
+参考：[ASCII字符集](https://zh.wikipedia.org/wiki/ASCII)
 
 
-3.特殊字符  
+**Unicode转义字符**  
+`\u` + 四个十六进制数字
+范围: `\u0000` ~ `\ufffff`
+
+参考：[Unicode字符列表](https://zh.wikipedia.org/wiki/Unicode%E5%AD%97%E7%AC%A6%E5%88%97%E8%A1%A8)
+
+
+**特殊字符**  
 双引号：\\"  
 单引号：\\'  
 反斜线：\\\\
 
 
-4.控制字符  
+**控制字符**  
 回车：\r  
 换行：\n  
 走纸换页：\f  
@@ -35,8 +39,7 @@ categories:
 退格：\b
 
 
-正则表达式中需要转义的字符
-
+**正则表达式中需要转义的字符**
 
 元字符 | 说明
 ---|---
@@ -71,7 +74,5 @@ t.replaceFirst("\\|", ","); // 123,456|789
 参考  
 [
 正则表达式（一）：纠结的转义](http://www.infoq.com/cn/news/2011/01/regular-expressions-1)  
-
 [你真的会用java replaceAll函数吗？](http://www.cnblogs.com/iyangyuan/p/4809582.html)  
-
 [Java转义符\\|](http://www.cnblogs.com/yaochc/p/4574910.html)

@@ -1,9 +1,13 @@
 ---
 title: gradle 入门
 date: 2016-11-13 16:33:23
+toc: true
 tags:
 ---
-###  安装
+简单记录gradle入门使用的过程。
+<!--more-->
+
+##  安装
 
 在 [官网](http://www.gradle.org/downloads) 下载（仅需要 Gradle的二进制发布包）  
 
@@ -42,7 +46,7 @@ GRADLE_USER_HOME中已生成如下目录
 ```
 
 
-### 配置java项目
+## 配置java项目
 
 创建目录结构
 ```
@@ -89,7 +93,7 @@ gradle build
 - lib: 组装好的项目包（通常为：.jar或者.war文件）
 
 
-### 申明依赖
+## 声明依赖
 创建测试类
 ```
 mkdir -p src/test/java/hello
@@ -145,7 +149,7 @@ dependencies {
 ```
 
 
-### maven远程地址
+## 修改maven远程地址
 ```
 repositories {
     mavenLocal()
@@ -185,7 +189,7 @@ Repository https://repo1.maven.org/maven2/ replaced by http://maven.aliyun.com/n
 ```
 
 
-### Gradle Wrappe
+## Gradle Wrappe
 Gradle Wrapper是开始一个Gradle构建的首选方式。它包含了windows批处理以及OS X和Linux的Shell脚本。这些脚本允许我们在没有安装Gradle的系统上执行Gradle构建。  
 build.gradle如下内容
 ```
@@ -214,7 +218,7 @@ gradle wrapper
 当第一次通过wrapper使用指定版本的Gradle构建系统时，wrapper首先下载对应版本的Gradle可执行文件。  
 可以直接将下载好的对应版本的Gradle可执行文件放到GRADLE_USER_HOME/wrapper/dists下对应的目录。
 
-### 多模块项目
+## 多模块项目
 创建一个新的目录，初始化
 ```
 gradle init

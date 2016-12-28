@@ -1,21 +1,25 @@
 ---
 title: java运行时内存概述
 date: 2016-12-07 08:45:15
+toc: true
 tags: 
 - jvm
 ---
+文章描述了java运行时内存分区，包括程序计数器，Java虚拟机栈，本地方法栈，Java堆，方法区以及java8内存分区的变化。
+<!--more-->
+
 **运行时数据区域**
 java虚拟机在执行java程序的过程中会把它管理的内存划分为若干不同的数据区域。这些区域都有各自的用途，以及创建和销毁时间。有的区域随着虚拟机启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。  
 
 ![](java-memory/3.png)
 
-# 程序计数器
+## 程序计数器
 每一条java虚拟机线程都有自己的pc寄存器。
 如果当前方法不是Native方法，pc寄存器会保存虚拟机正在执行的字节码指令的地址;如果当前方法是Native方法，则pc寄存器的值为undefined。
 
 此区域任何情况都不能导致OutOfMemoryError情况的区域  
 
-# Java虚拟机栈
+## Java虚拟机栈
 
 线程私有,生命周期与线程相同.
 
@@ -53,7 +57,7 @@ public class JavaVMStackSOF {
 `stackLeak()`方法不断调用自身，导致虚拟机栈溢出，抛出异常`java.lang.StackOverflowError`
 
 
-# 本地方法栈
+## 本地方法栈
 
 与虚拟机栈相似, 但它为虚拟机用到的Native方法服务.
 
@@ -62,7 +66,7 @@ public class JavaVMStackSOF {
 本地方法无法设定（-Xoss无效）
 
 	
-# Java堆
+## Java堆
 用于存放对象实例，所有线程共享  
 所有对象实例和数组都要在堆上分配.(栈上分配, 标量替换等优化技术除外)  
 可以处于物理上不连续的内存空间, 只要逻辑上是连续的即可.
@@ -86,7 +90,7 @@ public class HeapOOM {
 `list`不断存入创建的Object对象，导致Java堆内存不足，抛出`java.lang.OutOfMemoryError: Java heap space`异常。
 
 
-# 方法区
+## 方法区
 方法区用于存储已被虚拟机加载的类信息，常量，静态变量，即时编译器编译后的代码等数据。
 运行时常量池是方法区的一部分，用于存储编译期生成的各种字面量和符号引用。
 
@@ -99,7 +103,7 @@ public class HeapOOM {
 
 
 
-# jdk8变化
+## jdk8变化
 jdk6:
 ![](java-memory/1.png)
 

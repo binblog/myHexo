@@ -1,14 +1,15 @@
 ---
 title: effective java - 异常
 date: 2016-10-07 23:43:12
-
+toc: true
 tags:
   - java
 categories: 
 - java
 ---
 
-
+[《Effective Java》](https://book.douban.com/subject/3360807/)读书笔记，关于异常系列。
+<!--more-->
 ## 只针对异常的情况才使用异常
 **异常应该只用于异常情况，不应该用于正常的控制流**
 

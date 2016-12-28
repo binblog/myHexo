@@ -1,10 +1,14 @@
 ---
 title: effective java 泛型
 date: 2016-11-06 17:37:02
+toc: true
 tags:
 - java
 ---
-### 不要在再使用原生态类型
+
+[《Effective Java》](https://book.douban.com/subject/3360807/)读书笔记，关于泛型系列。
+<!--more-->
+## 不要在再使用原生态类型
 声明中具有一个或多个 *类型参数* 的类或接口就是泛型
 
 原生态类型：即不带任何实际类型参数的泛型，如List<E>对应的原生态类型为List。  
@@ -27,14 +31,14 @@ if(set instanceof Set) {
 注意此处将set转换为通配符类型Set<?>，而不是原生类型Set
 
 
-### 消除非受检警告
+## 消除非受检警告
 **尽可能消除每一个非受检警告**
 如果无法消除警告，而且可以证明引起警告的代码是类型安全的（只在在这种情况下），可以用一个@SuppressWarnings("unchecked")  
 **应该始终在尽可能小的范围中使用SuppressWarnings注解。永远不要在整个类上使用SuppressWarnings，这么做会掩盖重要的警告**  
 
 
 
-### 列表优先于数组
+## 列表优先于数组
 数组是协变的：如果Sub是Sup的子类型，则Sub[]是Sup[]的子类型。  
 泛型是不可变的：对于任意两个不同的类型T1和T2，List<T1>既不是List<T2>的子类型，也不是List<T2>的超类型。
 
@@ -51,7 +55,7 @@ String s = strings[0].get(0);   //抛出异常ClassCastException
 如果创建泛型数组出错，最好的解决方案是优先使用集合类型List<E>，而不是数组类型E[]。
 
 
-### 优先使用泛型
+## 优先使用泛型
 设计新类型时，如果客户需要（与Object）进行类型转换才能使用，则可以考虑使用泛型。
 如
 ```java
@@ -100,10 +104,10 @@ public E pop() {
 ```
 数组类型的未受检转换比变量的未受检转换更危险，建议使用第二种方法。但如果需要从数组多处读取元素，第二种方法又需要多次转换，所以第一种更常用。
 
-### 优先考虑泛型方法
+## 优先考虑泛型方法
 与类型一样，为了确保新方法不用转换就可以使用，可以优先考虑泛型方法
 
-###  利用有限制通配符提升api的灵活性
+##  利用有限制通配符提升api的灵活性
 上述的Stack类中增加一个方法，将Iterable中所有的元素都加入到Stack中：
 ```java
 public void pushAll(Iterable<E> src) {
@@ -184,4 +188,4 @@ public static <T extends Comparable<? super T>> T max(List<? extends T> list) { 
 Comparable始终都是消费者，使用Comparable<? super T>优先于Comparable<T>,Comparator也是一样。
 
 
-### 优先使用类型安全的异构容器
+## 优先使用类型安全的异构容器

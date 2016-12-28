@@ -1,12 +1,14 @@
 ---
 title: dubbo与dubbox入门
 date: 2016-11-06 17:32:23
+toc: true
 tags:
 - java
 ---
-记录一下dobbu的入门过程
+记录一下dobbu及dubbox的入门过程及一些简单的栗子
+<!--more-->
 
-### dubbo service
+## dubbo service
 pom中添加依赖
 ```
 <dependency>
@@ -105,7 +107,7 @@ window下查看29115端口的占用情况
   TCP    [::]:29115             [::]:0                 LISTENING       4484
 ```
 
-### dubbo client
+## dubbo client
 
 配置文件内容：
 ```
@@ -133,7 +135,7 @@ public static void main( String[] args ) {
 ```
 运行main方法，客户端就可以远程调用服务端的方法了。
 
-### zookeeper注册中心 
+## zookeeper注册中心 
 上述简单实例中并没有使用注册中心，下面使用zookeeper作为注册中心  
 服务端pom中添加zk依赖：
 ```
@@ -191,7 +193,7 @@ public static void main( String[] args ) {
 
 
 
-### dubbox入门
+## dubbox入门
 dubbox是当当网对ddubbo的开源扩展，支持REST风格远程调用。项目地址：https://github.com/dangdangdotcom/dubbox  
 
 dubbox并没有上传jar到maven仓库，所以需要编译java代码
@@ -205,7 +207,7 @@ git clone https://github.com/dangdangdotcom/dubbox
 
 
 
-### dubbox service
+## dubbox service
 将上述dubbo service项目中pom中添加
 ```       
 <dependency>
@@ -249,7 +251,7 @@ git clone https://github.com/dangdangdotcom/dubbox
 
 这里重新执行main方法，并使用dubbo client仍然能调用成功。
 
-#### REST远程调用
+## REST远程调用
 配置文件resources/META-INF/spring/application.xml 添加rest协议：
 ```
 <!-- 使用tomcat开放rest接口 -->

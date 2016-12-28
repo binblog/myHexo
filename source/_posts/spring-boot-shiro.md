@@ -1,13 +1,18 @@
 ---
 title: spring boot 配置shiro
 date: 2016-10-08 23:23:30
+toc: true
 tags:
   - java
 categories: 
 - java
 ---
-## spring boot 配置shiro
+
+记录spring boot中配置shiro的过程及一些小栗子
 <!--more-->
+
+## spring boot 配置shiro
+
 ### 由于使用了maven，所以先编辑pom
 ```
 <parent>

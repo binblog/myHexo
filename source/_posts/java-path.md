@@ -7,11 +7,15 @@ categories:
 date: 2016-10-10 22:30:02
 ---
 
+总结了一下java中获取路径的一些方法。
+<!--more-->
+
+
 ### 相对路径
 System.getProperty("user.dir") 可以获取java虚拟机调用目录，即当前用户目录。  
 JAVA IO操作中相对路径都是该路径。  
 
-<!--more-->
+
 
 ```
 public class Path {

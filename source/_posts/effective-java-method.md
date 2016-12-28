@@ -1,11 +1,14 @@
 ---
 title: effective java - 方法
 date: 2016-10-12 22:35:24
+toc: true
 tags:
   - java
 categories: 
 - java
 ---
+[《Effective Java》](https://book.douban.com/subject/3360807/)读书笔记，关于方法系列。
+<!--more-->
 
 ## 检查参数有效性
 应该在方法开头检查参数，如索引值必须大于0，对象引用不能为null（“应该在发生错误之后尽快检测错误”）

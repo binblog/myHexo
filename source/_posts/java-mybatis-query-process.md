@@ -1,10 +1,15 @@
 ---
 title: mybatis查询过程源码简析 
 date: 2016-12-11 00:06:52
+toc: true
 tags:
+
 - 源码 
 ---
-### 简单实例
+本文通过阅读源码，分析mybatis中执行一个简单sql语句的过程，但不会涉及到关键实现。
+<!--more-->
+
+## 一个小栗子
 应用官网上一个简单的实例
 
 mybatis-config.xml
@@ -67,7 +72,7 @@ public void  test() throws IOException {
 ![](java-mybatis-query-process/1.png)
 
 下面简单看一下mybatis中sql查询的执行流程。
-### 构建过程
+## 构建过程
 `new SqlSessionFactoryBuilder().build(inputStream)`会解析mybatis-config.xml配置文件，并构建SqlSessionFactory对象。
 ```
 public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
@@ -114,7 +119,7 @@ private void parseConfiguration(XNode root) {
 可以看到方法中对mybatis-config.xml配置的内容逐一进行了解析，这里不再细说。
 
 
-### 获取SqlSession
+## 获取SqlSession
 ```
 SqlSession session = sqlSessionFactory.openSession();
 ```
@@ -136,7 +141,7 @@ private SqlSession openSessionFromDataSource(ExecutorType execType, TransactionI
 上述方法中创建了事务管理工厂，简单的执行器SimpleExecutor，并构造了DefaultSqlSession。
 
 
-### 执行查询
+## 执行查询
 ```
 Blog blog = session.selectOne("mapper.blog.BlogMapper.selectBlog", 1);
 ```
@@ -214,7 +219,7 @@ public interface StatementHandler {
 }
 ```
 这些方法负责对真实数据库进行处理。StatementHandler有如下实现类
-![](http://ofbrwsjmr.bkt.clouddn.com/mybatis_select_source/1.png)
+![](java-mybatis-query-process/2.png)
 
 
 `configuration.newStatementHandler`将生成一个RoutingStatementHandler类，RoutingStatementHandler实际上是对PreparedStatementHandler，CallableStatementHandler，SimpleStatementHandler的路由处理，会根据MappedStatement.StatementType，将请求对应转发到这些类上。  

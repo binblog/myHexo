@@ -4,7 +4,11 @@ date: 2016-12-11 07:44:49
 tags:
 - 源码
 ---
-### 简单实例
+本文通过源码阅读，分析mybatis中mapper动态代理的实现。
+<!--more-->
+
+
+### 一个小栗子
 ```
 Mapper接口
 public interface BlogMapper {
@@ -48,7 +52,7 @@ public void test() throws IOException {
 
 ### mapperRegistry初始化
 先看一下mapperRegistry的初始化过程
-`SqlSessionFactoryBuilder().build(inputStream);`构造初始环境，并会调用到`mapperElement(root.evalNode("mappers"))`方法，该方法会解析配置文件中的mappers标签配置。
+`SqlSessionFactoryBuilder().build(inputStream)`构造初始环境，并会调用到`mapperElement(root.evalNode("mappers"))`方法，该方法会解析配置文件中的mappers标签配置。
 ```
   private void mapperElement(XNode parent) throws Exception {
     if (parent != null) {

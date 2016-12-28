@@ -1,8 +1,14 @@
 ---
 title: Wireshark分析http请求
 date: 2016-11-27 17:00:48
+toc: true
 tags: http
 ---
+使用Wireshark分析一个http请求的栗子，包括握手，挥手过程，内容传输等。
+<!--more-->
+
+
+## 一个小栗子
 client(10.3.20.42)向server(ec2-54-70-215-146....)发送http请求，获取一个html页面。
 ```
 curl http://54.70.215.146:8080/
@@ -13,7 +19,7 @@ curl http://54.70.215.146:8080/
 
 
 
-#### 三次握手
+## 三次握手
 
 报文NO34,NO45,NO46为三次握手报文。（NO序号为Wireshark创建的序号，与http无关）
 
@@ -21,15 +27,12 @@ curl http://54.70.215.146:8080/
 ![tcp报文格式](http://ofbrwsjmr.bkt.clouddn.com/wireshark_http/3.png)
 
 
-tcp标志
+需要关注的tcp标志
 >SYN：携带这个标志的包表示正在发起连接请求。因为连接是双向的，所以建立连接时，双方都要发一个SYN。  
 FIN: 携带这个标志位的包表示正在请求终止连接。因为连接是双向的，所以彻底关闭一个连接时，双方都要发一个FIN。  
 RST：用于重置一个混乱的连接，或拒绝一个无效的请求。
 
->seq号：TCP提供有序的传输，所以每个数据段都要标上一个序号。当接收方接收到乱序的包时，可以根据序号重新排序。
-seq号即表示数据包的序号。
-TCP是双向的，双方都可以是发送方，所以各自维护了一个Seq号。  
-len(数据偏移):该数据包的长度。注意这个长度不包括TCP头。  
+>seq号：TCP提供有序的传输，所以每个数据段都要标上一个序号。当接收方接收到乱序的包时，可以根据序号重新排序。TCP是双向的，双方都可以是发送方，所以各自维护了一个Seq号。  
 ack号：确认号，接收方向发送方确认已经收到了哪些字节。如甲向乙发送了“Seq:x   len:y”的数据段给乙，那乙回复Ack为x+y，表示它已经收到x+y之前的所有字节。同样，Ack号恰好应该是发送方下一个Seq号。
 
 三次握手过程为
@@ -47,7 +50,7 @@ NO45是Server回复报文，seq=0，len=0， ack=1
 No46是Client回复报文，seq=1，ack=1
 
 
-#### Http请求
+## Http请求
 报文NO47是Client向Server发送的http请求
 详细的报文内容为
 ![image](http://ofbrwsjmr.bkt.clouddn.com/wireshark_http/2.png?v=20150430)
@@ -84,7 +87,7 @@ e7fec30c  确认号3892232972
 
 报文NO48为Server回复的Ack报文，ack=1+82=83
 
-#### Http回复
+## Http回应
 NO49到NO53，是TCP层收到上层大块报文后分解发出的数据段。TCP根据MSS（即每个TCP包所能携带的最大数据量，报文NO34中已经指定了MSS为1460）进行分段发送。
 
 这几个TCP segment数据段的ack都是83，len都是1460
@@ -98,7 +101,7 @@ NO55到NO57依然为TCP segment数据段。
 NO59是Client发送的ack
 NO60包括了两个标志，一个是Server的ack标志，别一个是Fin标志，表示Server请求关闭连接。  
 
-### 四次挥手
+## 四次挥手
 四次挥手过程
 
 ![@startuml

@@ -264,11 +264,16 @@ table td, table th {
 
 
 code {  
-    white-space: pre-wrap;       /* CSS 3 */
-    white-space: -moz-pre-wrap;  /* Mozilla */
-    white-space: -pre-wrap;      /* Opera 4-6 */
-    white-space: -o-pre-wrap;    /* Opera 7 */
-    word-wrap: break-word;       /* IE 5.5+ */
+    /*white-space: pre-wrap;       /* CSS 3 */
+    /*white-space: -moz-pre-wrap;  /* Mozilla */
+    /*white-space: -pre-wrap;      /* Opera 4-6 */
+    /*white-space: -o-pre-wrap;    /* Opera 7 */
+    /*word-wrap: break-word;       /* IE 5.5+ */
+	
+	color : #080808
 }
 
-
+.content p {
+	text-indent:2em;
+	line-height:1.8em;
+}

@@ -1,9 +1,13 @@
 ---
 title: java class文件结构
 date: 2016-12-07 10:22:20
+toc: true
 tags:
 - jvm
 ---
+文章描述了class文件的结构，并解析一个简单的class文件的字节内容。
+<!--more-->
+
 **语言无关**
 
 除了Java语言， 其他语言也可以运行在Java虚拟机上。Java规范分为Java语言规范和Java虚拟机规范。 Java虚拟机不和包括Java在内的任何语言绑定， 它只与“Class文件”这种特定的二进制文件格式所关联。基于安全方面的考虑， Java虚拟机规范要求在Class文件中使用许多强制性的语法及结构化约束，但任何一门功能性语言， 只要可以把程序代码编译成能被Java虚拟机接受的有效的Class文件， 它就可以运行在Java虚拟机上。
@@ -138,7 +142,7 @@ Signature | 类，方法表，字段表 | 记录泛型中的相关信息
 ... | | 
 
 
-### 解析class文件
+## 解析class文件
 下面解析一个class文件  
 java源码：
 ```
@@ -329,6 +333,7 @@ max_locals代表局部变量表所需的存储空间，单位是Variable Slot（
 `0001` invokerspecial参数 指向常量#1  
 `B1` return 
 
+## 使用javap解析class文件
 可以使用javap解析class文件
 ```
 >javap -help

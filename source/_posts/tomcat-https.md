@@ -1,14 +1,16 @@
 ---
 title: tomcat配置https
 date: 2016-11-06 17:23:19
+toc: true
 tags:
   - java
 categories: 
 - java
 ---
 
-记录一下tomcat配置https的过程
-##### 生成密钥 
+记录一下tomcat配置https的方式
+<!--more-->
+## 生成密钥 
 ```
 $ keytool -genkey -alias tomcat  -keyalg RSA  -keystore tomcat.keystore
 $ $Enter keystore password:
@@ -40,7 +42,7 @@ $Re-enter new password:
 
 
 
-#### 导出crt证书
+## 导出crt证书
 ```
 $ keytool -export -file tomcat.crt   -alias tomcat -keystore tomcat.keystore
 $ Enter keystore password:
@@ -48,7 +50,7 @@ Certificate stored in file <tomcat.crt>
 ```
 密码使用上面输入的密钥库口令
 
-#### 将crt证书导入到JVM密钥库
+## 将crt证书导入到JVM密钥库
 ```
 $ sudo keytool -import -keystore $JAVA_HOME/jre/lib/security/cacerts -file tomcat.crt -alias  tomcat
 Enter keystore password:
@@ -80,7 +82,7 @@ Certificate was added to keystore
 密码使用changeit，这是JVM密钥库的密钥库口令
 
 
-#### 修改tomcat配置
+## 修改tomcat配置
 修改tomcat/conf/server.xml的配置
 将
 ```
