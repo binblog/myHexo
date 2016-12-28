@@ -7,7 +7,7 @@ tags:
 本文通过源码阅读，分析spring获取bean的过程
 <!--more-->
 
-```
+```java
     Blog bean = (Blog)xmlBeanFactory.getBean("blog");
 ```
 
@@ -16,7 +16,7 @@ XmlBeanFactory继承了AbstractBeanFactory，`getBean`将调用AbstractBeanFacto
 
 
 AbstractBeanFactory.doGetBean：
-```
+```java
 protected <T> T doGetBean(
 		final String name, final Class<T> requiredType, final Object[] args, boolean typeCheckOnly) ... {
 	final String beanName = transformedBeanName(name);	// 处理别名
@@ -56,7 +56,7 @@ protected <T> T doGetBean(
 
 重载方法一`getSingleton(beanName)`从容器中获取单例bean。  
 DefaultSingletonBeanRegistry.getSingleton:
-```
+```java
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
 		...
 		Object singletonObject = this.singletonObjects.get(beanName);	
@@ -93,7 +93,7 @@ public Object getSingleton(String beanName, ObjectFactory<?> singletonFactory) {
 
 bean创建过程在`return createBean(beanName, mbd, args);`代码，
 `createBean`方法由AbstractAutowireCapableBeanFactory实现：
-```
+```java
 protected Object createBean(String beanName, RootBeanDefinition mbd, Object[] args) ... {
 	
 	// 解析class

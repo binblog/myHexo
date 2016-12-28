@@ -137,7 +137,7 @@ protected void parseBeanDefinitions(Element root, BeanDefinitionParserDelegate d
 上述方法根据Namespace Uri判断node是否为Spring定义的元素，如果是，则调用parseDefaultElement方法解析元素。
 用户可以自定义标签及标签解析器。
 
-```
+```java
 	private void parseDefaultElement(Element ele, BeanDefinitionParserDelegate delegate) {
 		if (delegate.nodeNameEquals(ele, IMPORT_ELEMENT)) {	// 解析import标签
 			importBeanDefinitionResource(ele);
