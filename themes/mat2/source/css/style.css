@@ -162,7 +162,7 @@ footer {
 	margin-top:2.5em;
 }
 
-.min-font {
+.all-post {
 	font-size:0.8em;
 }
 
@@ -277,3 +277,24 @@ code {
 	text-indent:2em;
 	line-height:1.8em;
 }
+
+
+.post-title {
+	color: #333;
+}
+
+.index-item-wrapper {
+	margin-right:2em;
+	padding-bottom:1em;
+	border-bottom:0.5px dashed  #aaa
+}
+
+/*.index-item-wrapper a {
+	color: #444444
+}
+
+.index-item-wrapper {
+	
+	margin-bottom:1em;
+	border-bottom:1px dashed  #888888
+}*/

@@ -13,11 +13,16 @@
 		              <h3>
 		                <a class="post-title" href="<%= url_for(post.path) %>"><%= post.title %></a>
 		              </h3>
-									<span class="post-time"><%= date(post.date) %></span>
-		              <div class="excerpt"><%- post.excerpt %></div>
+						<!--<span class="post-time"><%= date(post.date) %></span>-->
+		              
 		              <% if (post.excerpt){ %>
-		                  <a class="min-font" href="<%- url_for(post.path) %>"> 全文 </a>
-		              <% } %>
+							<div class="excerpt"><%- post.excerpt.replace(/(<([^>]+)>)/ig, '') %> </div>
+		              <% } else { %>
+							<div class="excerpt"><%- post.content.substring(0, 200).replace(/(<([^>]+)>)/ig, '') %> </div>
+					  <% } %>
+					  
+					  <span class="post-time"><%= date(post.date) %>
+					    <!--<a class="all-post" href="<%- url_for(post.path) %>"> 全文 </a>-->
 		            </div>
 				<% }) %>
 				<!-- archives -->
