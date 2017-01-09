@@ -274,7 +274,7 @@ code {
 }
 
 .content p {
-	text-indent:2em;
+	/*text-indent:2em;*/
 	line-height:1.8em;
 }
 

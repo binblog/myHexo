@@ -8,7 +8,7 @@ search:
 
 
 # Site
-title: 四十千
+title: 六千英里
 subtitle:
 description:
 author: bin
@@ -18,7 +18,7 @@ avatar: /images/head.png
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://localhost:4000
+url: https://6000miles.github.io
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -93,7 +93,7 @@ theme: mat2
 ## Docs: https://hexo.io/docs/deployment.html
 deploy: 
   type: git
-  repository: https://binblog:bin19910810@github.com/binblog/binblog.github.io.git
+  repository: https://6000Miles:bin19910810@github.com/6000Miles/6000Miles.github.io.git 
   branch: master
   
   

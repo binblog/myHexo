@@ -1,9 +1,11 @@
 ---
-title: resteasy与tomcat构建rest服务
+title: resteasy入门
 date: 2016-11-06 17:29:38
 tags:
 - java
 ---
+
+### 集成tomcat
 创建maven项目
 ```
 mvn archetype:generate -DgroupId=com.maven -DartifactId=resteasyD  -DinteractiveMode=false -DarchetypeCatalog=local
@@ -141,6 +143,110 @@ main目录下添加配置webapp/WEB-INF/web.xml，内容如下
 
 使用maven导出war，放到tomcat/webapps下运行  
 浏览器访问 http://localhost:8080/resteasyD-1.0-SNAPSHOT/echo/123 (resteasyD-1.0-SNAPSHOT为导出war包名)，可以看到浏览器显示服务器返回的字符串"123"
+
+### 集成Grizzly
+引用
+```
+	"org.glassfish.jersey.containers:jersey-container-grizzly2-servlet:2.16"
+	"org.glassfish.jersey.media:jersey-media-moxy:2.16"
+```
+
+```
+public class Blog {
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }	
+}
+
+@Path("blog")
+public class BlogService {
+    private Logger logger = LoggerFactory.getLogger(BlogService.class);
+
+    @GET
+    @Path("ping")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getIt() {
+        return "hello,client";
+    }
+
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Blog getBlog(@PathParam("id") long id) {
+        Blog blog = new Blog();
+        blog.setTitle("id is " + id);
+        return blog;
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String addBlog(Blog blog) {
+        logger.info("post blog : {}", blog);
+        return "post success";
+    }
+
+    @DELETE
+    @Path("{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String delete(@PathParam("id") long id) {
+        logger.info("delete id : " + id);
+
+        return "delete success";
+    }
+
+    @PUT
+    @Path("{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String put(@PathParam("id")long id,Blog blog) {
+        logger.info("id : {}, blog : {}", id , blog);
+
+        return "put success";
+    }
+}
+```
+
+启动Grizzly服务器
+```
+public class JerseyMain {
+    // Base URI the Grizzly HTTP server will listen on
+    public static final String BASE_URI = "http://localhost:8080/";
+
+    /**
+     * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
+     * @return Grizzly HTTP server.
+     */
+    public static HttpServer startServer() {
+        // create a resource config that scans for JAX-RS resources and providers
+        // in com.example package
+        final ResourceConfig rc = new ResourceConfig().packages("service.blog");
+
+        // create and start a new instance of grizzly http server
+        // exposing the Jersey application at BASE_URI
+        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+    }
+
+    /**
+     * Main method.
+     * @param args
+     * @throws IOException
+     */
+    public static void main(String[] args) throws IOException {
+        final HttpServer server = startServer();
+        System.out.println(String.format("Jersey app started with WADL available at "
+                + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
+        System.in.read();
+        server.stop();
+    }
+}
+```
 
 参考：  
 [利用resteasy框架构建rest webservice----第一波：快速构建HelloWorld（实例、教程） ](http://blog.csdn.net/rnzuozuo/article/details/38349403)
