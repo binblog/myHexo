@@ -4,7 +4,8 @@ date: 2016-12-16 07:45:24
 tags:
 - 源码
 ---
-本文通过源码阅读，分析spring获取bean的过程
+
+在{% post_link java-spring-load-config %}中简单描述了spring加载配置文件的过程，现在再来分析一下spring获取bean的过程。
 <!--more-->
 
 ```java
