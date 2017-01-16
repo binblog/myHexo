@@ -8,9 +8,7 @@ tags:
 在{% post_link java-spring-get-bean %} 中简单描述了spring创建bean的过程。
 
 
-已知，通过自定义BeanPostProcessor，可以在bean创建前后自定义自己的操作。
-
-一个小栗子：
+下面，通过自定义BeanPostProcessor，在bean创建前后自定义自己的操作。
 ```
 public class MyBeanProcessor implements BeanPostProcessor {
 
@@ -46,7 +44,6 @@ public void test() {
 	Assert.assertEquals(bean.getTitle(), "hello spring");
 }
 ```
-
 这时并没有输出MyBeanProcessor中定义的信息，而把测试方法修改为如下：
 ```
 @Test
@@ -56,9 +53,9 @@ public void test() {
 	Assert.assertEquals(bean.getTitle(), "hello spring");
 }
 ```
-可以看到程序输出了MyBeanProcessor中定义的信息。
+这时可以看到程序输出了MyBeanProcessor中定义的信息。
 
-org.springframework.context.support.ClassPathXmlApplicationContext是spring support中的类。下面看一下如何实现。
+org.springframework.context.support.ClassPathXmlApplicationContext是spring support中的类。下面简单看一下它做了哪些工作。
 
 ```
 public ClassPathXmlApplicationContext(String[] configLocations, boolean refresh,
@@ -133,10 +130,10 @@ ClassPathXmlApplicationContext -> AbstractXmlApplicationContext -> AbstractRefre
 ```
 public Object getBean(String name) throws BeansException {
 	assertBeanFactoryActive();	// 判断BeanFactory是否为Active
-	return getBeanFactory().getBean(name);	// 通过getBeanFactory()获取beanFactory，并生成bean
+	return getBeanFactory().getBean(name);	// 通过getBeanFactory()获取beanFactory，并使用beanFactory生成bean
 }
 ```
-而getBeanFactory在AbstractRefreshableApplicationContext中实现
+getBeanFactory在AbstractRefreshableApplicationContext中实现
 ```
 @Override
 public final ConfigurableListableBeanFactory getBeanFactory() {
@@ -176,8 +173,11 @@ protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
 	return beanFactory;
 }
 ```
+可以看到该方法先调用了`refreshBeanFactory();`来刷新beanFactory，再通过`getBeanFactory()`获取beanFactory。
+
 
 ## 激活BeanFactoryPostProcessors
+通过BeanFactoryPostProcessor，可以对beanFactory进行处理，如修改其他BeanDefinition的配置。
 refresh()中通过`invokeBeanFactoryPostProcessors(beanFactory);`激活BeanFactoryPostProcessors。
 ```
 protected void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) {
@@ -185,17 +185,121 @@ protected void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory b
 }
 ```
 
-PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors
+PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors方法支持周期性的，一次性的和优先级的Processor，下面仅摘录部分示意代码
 ```
-
+public static void invokeBeanFactoryPostProcessors(
+	ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
+	...
+	String[] postProcessorNames =
+					beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
+	for (String ppName : postProcessorNames) {
+		if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {
+			priorityOrderedPostProcessors.add(beanFactory.getBean(ppName, BeanDefinitionRegistryPostProcessor.class));
+			processedBeans.add(ppName);
+		}
+	}				
+	
+	// Now, invoke the postProcessBeanFactory callback of all processors handled so far.
+	invokeBeanFactoryPostProcessors(registryPostProcessors, beanFactory);
+	invokeBeanFactoryPostProcessors(regularPostProcessors, beanFactory);
+}	
 ```
 
 ## 注册BeanPostProcessors处理器
+通过BeanPostProcessors，可以在bean创建过程中执行自定义操作，如重写`postProcessBeforeInitialization`方法并返回非null值，那spring将直接使用该返回值给bean赋值。
 refresh()中通过`registerBeanPostProcessors(beanFactory);`注册BeanPostProcessors处理器
 ```
 protected void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
 	PostProcessorRegistrationDelegate.registerBeanPostProcessors(beanFactory, this);
 }
+```
 
+PostProcessorRegistrationDelegate.registerBeanPostProcessors中也是获取xml配置中的BeanPostProcessor处理器，并注册到beanFactory中，在spring创建bean时，将获取beanFactory中的BeanPostProcessor并调用。
+```
+public static void registerBeanPostProcessors(
+		ConfigurableListableBeanFactory beanFactory, AbstractApplicationContext applicationContext) {
+	String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanPostProcessor.class, true, false);
+	
+	// First, register the BeanPostProcessors that implement PriorityOrdered.
+	sortPostProcessors(beanFactory, priorityOrderedPostProcessors);
+	registerBeanPostProcessors(beanFactory, priorityOrderedPostProcessors);
+	...
+}		
+```
+
+## 初始化事件广播器
+Spring事件体系包括三个组件：事件，事件监听器，事件广播器。事件广播器负责将事件广播给监听器。
+`initApplicationEventMulticaster`将初始化广播器,并放到beanFactory中  
+```
+protected void initApplicationEventMulticaster() {
+	ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+	// beanFactory中包含了事件广播器
+	if (beanFactory.containsLocalBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME)) {	
+		this.applicationEventMulticaster =
+				beanFactory.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, ApplicationEventMulticaster.class);
+	}
+	else {	// 使用默认的事件广播器
+		this.applicationEventMulticaster = new SimpleApplicationEventMulticaster(beanFactory);
+		beanFactory.registerSingleton(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, this.applicationEventMulticaster);
+	}
+}
+```
+
+## 初始化事件监听器
+事件监听器负责监听事件，并做出处理。
+registerListeners将初始化事件监听器，并添加到事件广播器上。
+```
+protected void registerListeners() {
+	// Register statically specified listeners first.
+	for (ApplicationListener<?> listener : getApplicationListeners()) {
+		getApplicationEventMulticaster().addApplicationListener(listener);
+	}
+
+	// Do not initialize FactoryBeans here: We need to leave all regular beans
+	// uninitialized to let post-processors apply to them!
+	String[] listenerBeanNames = getBeanNamesForType(ApplicationListener.class, true, false);
+	for (String listenerBeanName : listenerBeanNames) {
+		getApplicationEventMulticaster().addApplicationListenerBean(listenerBeanName);
+	}
+
+	// Publish early application events now that we finally have a multicaster...
+	...
+}
+```
+
+## finishRefresh
 
 ```
+protected void finishRefresh() {
+	// Initialize lifecycle processor for this context.
+	initLifecycleProcessor();
+
+	// Propagate refresh to lifecycle processor first.
+	getLifecycleProcessor().onRefresh();
+
+	// Publish the final event.
+	publishEvent(new ContextRefreshedEvent(this));
+
+	// Participate in LiveBeansView MBean, if active.
+	LiveBeansView.registerApplicationContext(this);
+}
+```
+LifecycleProcessor是spring生命周期的管理。可以定义spring启动start，停止stop，或刷新onRefresh等操作。
+
+```
+protected void initLifecycleProcessor() {
+	ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+	if (beanFactory.containsLocalBean(LIFECYCLE_PROCESSOR_BEAN_NAME)) {
+		this.lifecycleProcessor =
+				beanFactory.getBean(LIFECYCLE_PROCESSOR_BEAN_NAME, LifecycleProcessor.class);
+	}
+	else {	// 使用默认的LifecycleProcessor
+		DefaultLifecycleProcessor defaultProcessor = new DefaultLifecycleProcessor();
+		defaultProcessor.setBeanFactory(beanFactory);
+		this.lifecycleProcessor = defaultProcessor;
+		beanFactory.registerSingleton(LIFECYCLE_PROCESSOR_BEAN_NAME, this.lifecycleProcessor);
+	}
+}
+```
+
+

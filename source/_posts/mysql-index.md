@@ -45,11 +45,11 @@ create table t (
 ```
 ![](mysql-index/1.png)
 
-键值都是排序的。即(1, 1),(1, 2),(2, 1), (2, 4), (3, 1), (3, 2)。索引按(a, b) 的顺序进行存放。
+从上图，可以看到键值都是排序的。即(1, 1),(1, 2),(2, 1), (2, 4), (3, 1), (3, 2)。索引按(a, b) 的顺序进行存放。
 
-select * from table where a=XXX and b =XXX 可以使用联合索引，
-select * from table where a=XXX也可以。
-select * from table where  b =XXX 不能使用联合索引。因为叶子节点的b值为1,2,1,4,1,2，是不排序。
+`select * from table where a=XXX and b=XXX` 可以使用联合索引，
+`select * from table where a=XXX` 也可以。
+`select * from table where  b=XXX` 不能使用联合索引。因为叶子节点的b值为1,2,1,4,1,2，是不排序。
 
 **聚集索引和辅助索引都是B-Tree 索引**
 
